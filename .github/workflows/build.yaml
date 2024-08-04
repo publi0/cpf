@@ -1,0 +1,34 @@
+name: Build
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+          - name: Set up Go
+            uses: actions/setup-go@v2
+            with:
+              go-version: 1.22.5
+          - name: Build
+            run: go build -o cpf
+          - name: Archive artifacts
+            uses: actions/upload-artifact@v2
+            with:
+              name: cpf
+              path: .
+          - name: GoReleaser
+            uses: goreleaser/goreleaser-action@v2
+            with:
+              version: latest
+              args: release
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

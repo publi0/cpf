@@ -1,0 +1,29 @@
+project_name: cpf
+
+builds:
+  - id: "cpf"
+    main: ./main.go
+    binary: cpf
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    hooks:
+      pre: go mod tidy
+      post: go test ./...
+
+archives:
+  - id: "archive"
+    builds:
+      - "cpf"
+    format: tar.gz
+    files:
+      - README.md
+
+release:
+  github:
+    owner: publi0
+    name: cpf
